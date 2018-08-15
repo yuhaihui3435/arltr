@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <title>跨库集成搜索平台11111</title>
+    <link rel="stylesheet" href="../static/css/all_page.css" th:href="@{/css/all_page.css}"/>
+    <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet" type="text/css" media="all"/>
+    <link href="../static/css/search_page.css" th:href="@{/css/search_page.css}" rel="stylesheet" type="text/css" media="all"/>
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="search-bg">
+
+<div class="container-fluid" style="height: 100%">
+    <div class="row search-box-sf">
+        <div th:replace="fragments/base :: search_header"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center" style="margin-top:30px">
+            <div class="search-mid-logo">
+                <img src="../static/images/searchImg/search-logo.png" th:src="@{/images/searchImg/search-logo.png}"
+                     alt=""/>
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <form id="searchForm" action="/search" method="get">
+                <div class="input-group  ">
+                	<input id="userId" type="hidden" th:value="${session.user.id}">
+                    <input name="query" type="text" class="form-control" id="query" th:attr="value=${query}" autocomplete="off">
+                    
+                    <div id="suContent" class="search-input-down hidden">
+                         <ul id="suList">
+                             <li class="search-list-item">Cras justo odio</li>
+                             <li class="search-list-item">Dapibus ac facilisis in</li>
+                             <li class="search-list-item">Morbi leo risus</li>
+                             <li class="search-list-item">Porta ac consectetur ac</li>
+                             <li class="search-list-item">Vestibulum at eros</li>
+                         </ul>
+                     </div>
+                        
+                           <span class="input-group-btn">
+								<button class="btn btn-primary" name="query_bt" id="query_bt"
+                                           type="submit">搜索一下！
+                                   </button>
+							</span>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-3 search-box-config "></div>
+    </div>
+</div>
+
+<script src="../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../static/js/bootstrap-3.1.1.min.js" th:src="@{/js/bootstrap-3.1.1.min.js}"></script>
+<script src="../static/js/search.js" th:src="@{/js/search.js}"></script>
+<script src="../static/js/jquery-scrolltofixed-min.js" th:src="@{/js/jquery-scrolltofixed-min.js}"></script>
+<script src="../static/js/bootstrap-paginator.js" th:src="@{/js/bootstrap-paginator.js}"></script>
+<script>
+    $(document).ready(function () {
+        var cmHeight = $(window).height();
+        $('body').height(cmHeight);
+        setSuggestion();
+    	
+    	getUserHistory();
+    });
+</script>
+</body>
+</html>

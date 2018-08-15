@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+
+    <title>数据热度</title>
+
+    <link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+    <link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+    <link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+    <link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+    <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+    <script src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+    <div th:replace="fragments/base :: menu-left"></div>
+    <div class="cm-main-right">
+        <div class="easyui-layout cm-content">
+            <div data-options="region:'center'" title="数据热度统计图表" class="cm-center">
+                <div class="cm-center-detail">
+                    <div class="cm-demo-container">
+                        <div class="cm-search-tr">
+                           <!--  <div class="easyui-panel"> -->
+                                <div class="cm-div-l-r">
+                                    <div class="cm-d-h-padding">
+                                        <span class="cm-dataheat-span">&nbsp;时间范围:</span>
+                                        <a href="#" class="easyui-linkbutton c6" onclick="onSearch('7days')" id="btn1">最近7天</a>
+                                        <a href="#" class="easyui-linkbutton" onclick="onSearch('1month')" id="btn2">近1个月</a>
+                                        <a href="#" class="easyui-linkbutton" onclick="onSearch('3months')" id="btn3">近3个月</a>
+                                        <a href="#" class="easyui-linkbutton" onclick="onSearch('6months')" id="btn4">近半年</a>
+                                        <div class="cm-border-bottom"></div>
+                                    </div>
+                                    <div class="cm-div-l" >
+                                        <div class="cm-height500 " id="d_h_chart1">
+                                        </div>
+                                    </div>
+                                    <div class="cm-div-r" >
+                                        <div class="cm-height500 " id="d_h_chart2" style="margin-top:20px;">
+                                        </div>
+                                    </div>
+                                    <div class="cm-clear"></div>
+                                </div>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+<script src="../../static/js/echarts.min.js" th:src="@{/js/echarts.min.js}"></script>
+<script src="../../static/js/statistics/data_heat.js" th:src="@{/js/statistics/data_heat.js}"></script>
+</body>
+</html>

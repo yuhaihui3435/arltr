@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <title>跨库集成搜索平台</title>
+    <link rel="stylesheet" href="../static/css/all_page.css" th:href="@{/css/all_page.css}"/>
+    <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet" type="text/css"
+          media="all"/>
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" type="text/css" media="all"/>
+    <link href="../static/css/search_page.css" th:href="@{/css/search_page.css}" rel="stylesheet" type="text/css"
+          media="all"/>
+
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body onload="init()">
+
+<div class="container-fluid search-paddding-left0">
+    <div class="search-box-sf">
+        <div class="row">
+            <div th:replace="fragments/base :: search_header"></div>
+        </div>
+        <div>
+            <hr style="margin-top: 5px; margin-bottom: 10px;"/>
+        </div>
+        <div class="row">
+            <div class="col-sm-1 search-icon ">
+            </div>
+            <div class="col-sm-8">
+                <form id="searchForm" action="/search" method="get">
+                    <div class="input-group position-rel" id="sMark1">
+                    	<input id="userId" type="hidden" th:value="${session.user.id}">
+                        <input name="query" type="text" class="form-control" id="query"
+                               th:attr="value=${query}" autocomplete="off">
+
+                        <div id="suContent" class="search-input-down hidden">
+                            <ul id="suList">
+                                <li class="search-list-item">Cras justo odio</li>
+                                <li class="search-list-item">Dapibus ac facilisis in</li>
+                                <li class="search-list-item">Morbi leo risus</li>
+                                <li class="search-list-item">Porta ac consectetur ac</li>
+                                <li class="search-list-item">Vestibulum at eros</li>
+                            </ul>
+                        </div>
+                            <span class="input-group-btn">
+									<button class="btn btn-primary" name="query_bt" id="query_bt"
+                                            type="submit">搜索一下！
+                                    </button>
+							</span>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-sm-3 search-box-config "></div>
+        </div>
+    </div>
+
+    <!-- placeholder -->
+    <div class="scrollToFixed-placeholder"></div>
+
+    <!--<div class="row">-->
+    <div class="row" id="tools_top" style="padding-top: 4px;">
+        <div class="col-sm-5 col-sm-offset-1">
+            <span style="font-size: 12px; color: #999;" id="numspan"></span>
+        </div>
+        <div class="col-sm-2 search-tool-btn padding-left-unset" onclick="showToolsBottom()">
+            <span>搜索工具</span>
+            <span class="glyphicon glyphicon-filter"></span>
+        </div>
+    </div>
+    <div class="row  hidden" id="tools_bottom">
+        <div id="zd" class="col-sm-5  col-sm-offset-1">
+            <ul class="search-tool-options">
+                <li class="dropdown col-sm-3 padding-left-unset">
+                    <a id="queryOpt" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        <span id="queryField" data-value="1">搜索全部</span>
+                        <span class="glyphicon glyphicon-triangle-bottom"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="queryOpt">
+                        <li><a onclick="queryByField(this)" data-value="1" href="#">搜索全部</a></li>
+                        <li><a onclick="queryByField(this)" data-value="2" href="#">只搜索标题</a></li>
+                        <li><a onclick="queryByField(this)" data-value="3" href="#">只搜索作者</a></li>
+                        <li><a onclick="queryByField(this)" data-value="4" href="#">只搜索标题和作者</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown col-sm-4">
+                    <a id="sortOpt" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        <span id="sort" data-value="1">按照相关性排序</span>
+                        <span class="glyphicon glyphicon-triangle-bottom"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="sortOpt">
+                        <li><a onclick="orderBy(this)" data-value="1" href="#">按照相关性排序</a></li>
+                        <li><a onclick="orderBy(this)" data-value="2" href="#">按照创建时间排序</a></li>
+                    </ul>
+                </li>
+                
+                <li class="dropdown col-sm-3 padding-left-unset">
+                    <a id="sourceOpt" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        <span id="source" data-value="*">全部来源</span>
+                        <span class="glyphicon glyphicon-triangle-bottom"></span></a>
+                    <ul class="dropdown-menu" aria-labelledby="queryOpt">
+                        <li><a onclick="queryBySource(this)" data-value="*" href="#">全部来源</a></li>
+                        <li><a onclick="queryBySource(this)" data-value="1" href="#">TDM</a></li>
+                        <li><a onclick="queryBySource(this)" data-value="2" href="#">PDM</a></li>
+                        <li><a onclick="queryBySource(this)" data-value="3" href="#">知识库</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="toggleTools" class="col-sm-2 search-tool-btn padding-left-unset" onclick="clearTool()">
+            <span>收起工具</span><span class="glyphicon glyphicon-menu-up"></span>
+        </div>
+        <div id="clearOpts" class="col-sm-2 search-tool-btn padding-left-unset hidden" onclick="clearCondition()">
+            <span>清除条件</span><span class="glyphicon glyphicon-remove"></span>
+        </div>
+    </div>
+    <!-- </div>-->
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-7">
+            <hr style="margin-top: 10px; margin-bottom: 5px;"/>
+        </div>
+    </div>
+
+    <div class="row" id="myrow">
+        <div class="search-loadiing-body">
+            <div class="search-loading-gif"></div>
+            <div class="search-loadiing-text">正在加载中..</div>
+        </div>
+        <div class="col-sm-7 col-sm-offset-1 search-content position-rel">
+            <div>
+                <!-- 查询结果行 开始  -->
+                <div role="tabpanel" class="tab-pane active search-content-div hidden" id="rowTemplate">
+                    <div class="container-mysearch">
+                        <h3 class="t-mysearch rec-title">
+                            <span class="search-result-icon3"></span>
+                            <a class="title-link" style="color: blue; text-decoration: underline"
+                               target="_blank"
+                               href="http://www.bbc.co.uk/bbctrust/our_work/commercial/bbc_worldwide.html">
+                                <em>BBC</em> - <em>BBC</em> Worldwide - <em>BBC</em> Trust
+                            </a>
+                        </h3>
+
+                        <div class="tx-mysearch content">
+                            Accessibility links Accessibility Help <em>BBC</em> iD
+                            Notifications Accessibility links Accessibility Help <em>BBC</em>
+                            iD Notifications Accessibility links Accessibility Help <em>BBC</em>
+                            iD Notifications Accessibility links Accessibility Help <em>BBC</em>
+                            iD Notifications
+                        </div>
+                        <div class="s_content_tag">
+                            <span class="label label-warning classification">三级紧急</span>
+                            <span class="label label-default lastModified">2017/07/03</span>
+                            <span class="label label-default  author">姜甜甜</span>
+                        </div>
+                        <div class="row url">
+                            <div class="col-sm-10 cm-text-ellipsis">
+                                <a style="color: #299851" target="_blank"
+                                   class="c-showurl-mysearch link-url"
+                                   href="http://www.bbc.co.uk/bbctrust/our_work/commercial/bbc_worldwide.html">
+                                    http://www.bbc.co.uk/bbctrust/our_work/commercial/bbc_worldwide.html
+                                    http://www.bbc.co.uk/bbctrust/our_work/commercial/bbc_worldwide.html
+                                    http://www.bbc.co.uk/bbctrust/our_work/commercial/bbc_worldwide.html
+                                </a>
+                            </div>
+                            <div class="col-sm-2 text-right">
+                                <a class="cache-url" target="_blank" style="text-decoration: underline"
+                                   href="/catchPage?id=http://www.bbc.co.uk/bbctrust/our_work/commercial/bbc_worldwide.html&amp;queryKey=bbc">网页快照</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 查询结果行 结束  -->
+
+                <div class="tab-content ">
+
+                </div>
+                <div class="search-fenye">
+                    <div>
+                        <ul id='bp-3-element-sm-test'></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 search-r-list">
+            <div id="hotTop" class="list-group hidden">
+                <div class="search-r-bg9">
+                    搜索热词
+                </div>
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Dapibus ac facilisis in</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Morbi leo risus</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Porta ac consectetur ac</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Vestibulum at eros</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Vestibulum at eros</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Vestibulum at eros</a> -->
+            </div>
+            <div id="userHistory" class="list-group hidden">
+                <div class="search-r-bg9 ">
+                    我经常搜索的
+                </div>
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Dapibus ac facilisis in</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Morbi leo risus</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Porta ac consectetur ac</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Vestibulum at eros</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Vestibulum at eros</a> -->
+<!--                 <a href="#" class="list-group-item"><span class="badge">14</span>Vestibulum at eros</a> -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../static/js/bootstrap-3.1.1.min.js" th:src="@{/js/bootstrap-3.1.1.min.js}"></script>
+<script src="../static/js/search.js" th:src="@{/js/search.js}"></script>
+<script src="../static/js/jquery-scrolltofixed-min.js" th:src="@{/js/jquery-scrolltofixed-min.js}"></script>
+<script src="../static/js/bootstrap-paginator.js" th:src="@{/js/bootstrap-paginator.js}"></script>
+</body>
+</html>

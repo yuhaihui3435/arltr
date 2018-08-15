@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <title>用户详情</title>
+    <link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+    <link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+    <link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+    <link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+    <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+    <script src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="layout-body">
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+    <div class="easyui-layout cm-content">
+        <div data-options="region:'center',tools:[{iconCls:'icon-back',handler:function(){goBack();}}]" title="用户信息" class="cm-center">
+            <div class="cm-center-detail">
+                <div class="cm-demo-container">
+                        <form id="user_detail_form" method="post">
+                            <table class="cm-sbox-table2">
+                            <input type="hidden" name="id" id="id" th:value="${user.id}">
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">登录账号</span>
+                                            <div class="cm-sbox-div"  th:text="${user.userName}"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">职员编号</span>
+                                            <div class="cm-sbox-div"  th:text="${user.employeeNo}"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">职员姓名</span>
+                                            <div class="cm-sbox-div" th:text="${user.employeeName}"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">职务</span>
+                                            <div class="cm-sbox-div" th:text="${user.employeeTitleName}"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">所属组织机构</span>
+                                            <div class="cm-sbox-div" th:text="${user.orgnazation.name}"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">密级</span>
+                                            <input id="securityClassValue"  th:value="${user.securityClass}" type="hidden">
+<!--                                             <input class="cm-sbox-input" name="securityClass" id="securityClass" th:value="${user.securityClass}"> -->
+                                            <select class="easyui-combobox" name="securityClass" id="securityClass"
+                                                    style="width: 72%" data-options="editable:false">
+                                                <option th:each="jud:${enumeration}"
+                                                        th:selected="${user.securityClass}==${jud.getValue()}"
+                                                        th:value="${jud.getValue()}" th:text="${jud.getValueName()}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">职员身份验证</span>
+                                            <div class="cm-sbox-div" th:text="${user.employeeToken}"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">创建时间</span>
+                                            <div class="cm-sbox-div" th:text="${#dates.format(user.createAt,'yyyy-MM-dd HH:mm:ss')}">
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">更新时间</span>
+                                            <div class="cm-sbox-div" th:text="${#dates.format(user.updateAt,'yyyy-MM-dd HH:mm:ss')}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                </div>
+            </div>
+            <div class="cm-btn">
+                <div class="cm-btn-a">
+                    <a href="javascript:void(0)" class="easyui-linkbutton submit authority-insert"
+                       iconCls="icon-save" onclick="submitUser()">保存</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+<script src="../../static/js/user/user_detail.js" th:src="@{/js/user/user_detail.js}"></script>
+</body>
+</html>

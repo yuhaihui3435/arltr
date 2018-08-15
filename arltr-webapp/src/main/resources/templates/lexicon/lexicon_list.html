@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+	<title>航天词汇</title>
+
+	<link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+	<link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+	<link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+	<link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+
+    <!--[if lt IE 9]>
+	<script src="../../static/js/html5shiv.min.js"></script>
+	<script src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+	<div class="easyui-layout cm-content">
+		<div data-options="region:'center'" title="航天词汇列表" class="cm-center">
+			<div class="cm-center-detail">
+				<div class="cm-demo-container">
+				<div class="cm-search-tr">
+						<form id="lexiconform">
+							<table class="cm-sbox-table2">
+								<tr>
+									<td>
+										<div class="cm-sbox-td">
+											<span class="cm-sbox-span cm-text-center">航天词汇</span>
+											<input class="cm-sbox-input" id="word">
+										</div>
+									</td>
+									<td>
+										<div class="cm-sbox-td">
+											<input type="button" class="cm-search-button" value="搜索" onclick="submitData()"/>
+											<input type="button" class="cm-search-button" value="重置" onclick="onClear()" />
+										</div>
+									</td>
+								</tr>
+							</table>
+						</form>
+						</div>
+					<div>
+						<table id="lexicon_m_table"></table>
+						<div id="tb">
+							<div class="cm-toolbar">
+								<a href="/lexicon/new" class="easyui-linkbutton authority-insert" iconCls="icon-add">新增</a>
+								<a href="#" class="easyui-linkbutton authority-delete" iconCls="icon-remove" onclick="doDelete()">批量删除</a>
+								<a href="#" class="easyui-linkbutton authority-insert" iconCls="icon-add" onclick="doInsert()">批量导入</a>
+							</div>
+						</div>
+					</div>
+					<div id="divFile" class="easyui-dialog" style="display: none;">
+						<div id="uploadDiv">
+							<input id="fileupload" type="file" name="files[]" data-url="/lexicon/fileupload" multiple >
+							<button id="updbtn" onclick="save()">上传</button>
+						</div>
+						
+						<div id="pgDiv" style="display: none;">
+							<div id="msg">上传文件中。。。</div>
+							<div id="p" class="easyui-progressbar" data-options="value:60" style="width:90%;display: none;"></div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+<script src="../../static/js/fileup/jquery.ui.widget.js" th:src="@{/js/fileup/jquery.ui.widget.js}"></script>
+<script src="../../static/js/fileup/jquery.iframe-transport.js" th:src="@{/js/fileup/jquery.iframe-transport.js}"></script>
+<script src="../../static/js/fileup/jquery.fileupload.js" th:src="@{/js/fileup/jquery.fileupload.js}"></script>
+<script src="../../static/js/lexicon/lexicon_list.js" th:src="@{/js/lexicon/lexicon_list.js}"></script>
+</body>
+</html>

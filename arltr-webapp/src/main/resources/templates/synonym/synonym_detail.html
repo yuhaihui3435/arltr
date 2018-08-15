@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+
+    <title>智能语义库详情</title>
+
+    <link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+    <link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+    <link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+    <link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+
+</head>
+<body class="layout-body">
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+    <div class="easyui-layout cm-content">
+        <div data-options="region:'center',tools:[{iconCls:'icon-back',handler:function(){goBack();}}]"
+             title="智能语义库详情" class="cm-center">
+            <div class="cm-center-detail">
+                <div class="cm-demo-container">
+                	<div class="cm-search-tr">
+	                   <form id="synonym_detail_form" method="post">
+	                        <table class="cm-sbox-table2">
+	                            <tr>
+	                                <td colspan="2">
+	                                    <div class="cm-sbox-td">
+	                                        <span class="cm-sbox-spanl">词条</span>
+	                                        <input class="cm-sbox-inputl inputl-check86" id="word" name="word" th:value="${synonym.word}"
+	                                               data-options="required:true,validType:['maxLength[50]','isBlank']">
+	                                    </div>
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                                <td>
+	                                    <div class="cm-sbox-td">
+	                                        <span class="cm-sbox-span">创建人</span>
+	                                        <div class="cm-sbox-div" id="createByName1"
+	                                               th:text="${synonym.createByName}"></div>
+	                                        <input type="hidden" id="createBy" name="createBy"
+	                                               th:value="${synonym.createBy}">
+	                                        <input type="hidden" id="createByName" name="createByName"
+	                                               th:value="${synonym.createByName}">
+	                                    </div>
+	                                </td>
+	                                <td>
+	                                    <div class="cm-sbox-td">
+	                                        <span class="cm-sbox-span">创建时间</span>
+	                                        <div class="cm-sbox-div"  id="createAt1" 
+	                                               th:text="${#dates.format(synonym.createAt,'yyyy-MM-dd HH:mm:ss')}"></div>
+	                                        <input type="hidden" id="createAt" name="createAt" th:value="${#dates.format(synonym.createAt,'yyyy-MM-dd HH:mm:ss')}">       
+	                                    </div>
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                                <td>
+	                                    <div class="cm-sbox-td">
+	                                        <span class="cm-sbox-span">更新者</span>
+	                                        <div class="cm-sbox-div" id="updateByName1"
+	                                                th:text ="${synonym.updateByName}"></div>
+	                                        <input type="hidden" id="updateBy" name="updateBy"
+	                                               th:value="${synonym.updateBy}">
+	                                        <input type="hidden" id="updateByName" name="updateByName"
+	                                               th:value="${synonym.updateByName}">
+	                                    </div>
+	                                </td>
+	                                <td>
+	                                    <div class="cm-sbox-td">
+	                                        <span class="cm-sbox-span">更新时间</span>
+	                                        <div class="cm-sbox-div" id="updateAt1" 
+	                                               th:text="${#dates.format(synonym.updateAt,'yyyy-MM-dd HH:mm:ss')}"></div>
+	                                               
+	                                         <input type="hidden" id="updateAt" name="updateAt" th:value="${#dates.format(synonym.updateAt,'yyyy-MM-dd HH:mm:ss')}">       
+	                                    </div>
+	                                </td>
+	                            </tr>
+	                        </table>
+	                        <input id="synonymWord" name="synonymWord" th:value="${synonym.synonymWord}"
+	                               type="hidden">
+	                        <input id="id" name="id" th:value="${synonym.id}" type="hidden">
+	                    </form>
+               		</div>
+               		<div>
+                    	<table id="synonym_m_table" class="easyui-datagrid"></table>
+	                    <div id="tb">
+	                        <a href="javascript:void(0)" class="easyui-linkbutton"
+	                           data-options="iconCls:'icon-add',plain:true" onclick="append()">增加行</a>
+	                        <a href="javascript:void(0)" class="easyui-linkbutton"
+	                           data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除行</a>
+	                    </div>
+                	</div>
+               		
+                </div>
+                
+            </div>
+            <div class="cm-btn">
+                <div class="cm-btn-a">
+                    <a href="javascript:void(0)" class="easyui-linkbutton submit authority-insert"
+                       iconCls="icon-save" onclick="accept()">保存</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+<script src="../../static/js/synonym/synonym_detail.js" th:src="@{/js/synonym/synonym_detail.js}"></script>
+</body>
+</html>

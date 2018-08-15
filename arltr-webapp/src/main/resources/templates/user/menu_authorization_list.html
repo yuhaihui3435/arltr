@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+
+    <title>角色授权</title>
+    <link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+    <link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+    <link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+    <link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+    <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+    <script src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+<div th:replace="fragments/base :: menu-left"></div>
+    <div class="cm-main-right">
+        <div class="easyui-layout cm-content">
+            <div id="p" data-options="region:'west'" title="角色" class="cm-tree">
+                <table class="user_table" id="role_table">
+                </table>
+            </div>
+            <div data-options="region:'center'" title="菜单列表" class="cm-center">
+                <div class="cm-center-detail">
+                    <div class="cm-demo-container">
+                        <ul id="menutree" class="easyui-tree"></ul>
+                    </div>
+                </div>
+                <div class="cm-btn">
+                    <div class="cm-btn-a">
+                        <a href="javascript:void(0)" class="easyui-linkbutton submit authority-insert"
+                           iconCls="icon-save" onclick="saveMenuRoles()">保存</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+<script src="../../static/js/user/menu_authorization_list.js" th:src="@{/js/user/menu_authorization_list.js}"></script>
+</body>
+</html>

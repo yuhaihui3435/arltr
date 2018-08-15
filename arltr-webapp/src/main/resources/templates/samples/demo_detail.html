@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <title>详情模拟</title>
+    <link rel="stylesheet" href="../../static/themes/default/easyui.css" th:href="@{/themes/default/easyui.css}"/>
+    <link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+    <link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+    <link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+    <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+    <script src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="layout-body">
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+    <div class="easyui-layout cm-content">
+        <div data-options="region:'center',tools:[{iconCls:'icon-back',handler:function(){goBack();}}]" title="词条详情" class="cm-center">
+            <div class="cm-center-detail">
+                <div class="cm-demo-container">
+                        <form id="tesstform" method="post">
+                            <table class="cm-sbox-table2">
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-spanl cm-text-center">词条</span>
+                                            <input class="cm-sbox-inputl inputl-check86" id="word" name="word" th:value="${synonym.word}"
+                                                   data-options="required:true,validType:'maxLength[50]'">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span cm-text-center">词汇</span>
+                                            <input class="cm-sbox-input input-check72"
+                                                   data-options="required:true,validType:'maxLength[50]'">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span cm-text-center">创建人</span>
+                                            <input class="cm-sbox-input" disabled="disabled" id="2"
+                                                   name="createByName">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span cm-text-center">词汇</span>
+                                            <input class="cm-sbox-input" disabled="disabled" id="2"
+                                                   name="createByName">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span cm-text-center">创建人</span>
+                                            <div class="cm-sbox-div">231</div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span cm-text-center">词汇</span>
+                                            <div class="cm-sbox-div">231</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span cm-text-center">创建人</span>
+                                            <div class="cm-sbox-div">231</div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                </div>
+            </div>
+            <div class="cm-btn">
+                <div class="cm-btn-a">
+                    <a href="javascript:void(0)" class="easyui-linkbutton submit authority-insert"
+                       iconCls="icon-save" onclick="submitLexicon()">保存</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+<script src="../../static/js/lexicon/lexicon_detail.js" th:src="@{/js/lexicon/lexicon_detail.js}"></script>
+</body>
+</html>

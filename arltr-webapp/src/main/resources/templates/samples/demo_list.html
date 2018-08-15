@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+
+    <title>列表示例页面</title>
+
+    <link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+    <link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+    <link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+    <link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+    <!--[if lt IE 9]>
+    <script src="../../static/js/html5shiv.min.js"></script>
+    <script src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+    <div th:replace="fragments/base :: menu-left"></div>
+    <div class="cm-main-right">
+        <div class="easyui-layout cm-content">
+            <div data-options="region:'center'" title="角色人员列表" class="cm-center">
+                <div class="cm-center-detail">
+                    <div class="cm-demo-container">
+                        <div class="cm-search-tr">
+                            <form id="industryform">
+                                <table class="cm-sbox-table4">
+                                    <tr>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">登录账号</span>
+                                                <input id="vv" class="cm-sbox-input input-check72" data-options="required:true,validType:'email'">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">职员编号</span>
+                                                <input id="legalRepresentative" name="legalRepresentative"
+                                                       class="cm-sbox-input ">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">职员姓名</span>
+                                                <input id="registrationName" name="registrationName"
+                                                       class="cm-sbox-input ">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">组织机构</span>
+                                                <input id="businessAddress" name="businessAddress"
+                                                       class="cm-sbox-input ">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                        </td>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <div class="cm-sbox-btn-group">
+                                                    <input type="button" class="a_p1_search_btn authority-search"
+                                                           value="查询"/>
+                                                    <input type="reset" class="a_p1_search_btn authority-search"
+                                                           onclick="onClear()"/>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                        <div>
+                            <table id="demo_table" class="easyui-datagrid"></table>
+                            <div id="tb">
+                                <div class="cm-toolbar">
+                                    <a href="" class="easyui-linkbutton authority-insert" iconCls="icon-add">新增</a>
+                                    <a href="#" class="easyui-linkbutton authority-delete" iconCls="icon-remove"
+                                       onclick="deleteindustry()">删除</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="content">
+	<div class="a_p1_search">
+	    <div class="navbar-nav-search">
+	        <span>登录账号</span><input id="search_id1" class="a_p1_search_input" placeholder="请输入查询词汇"/>
+	    </div>
+	    <div class="navbar-nav-search">
+	        <span>职员编号</span><input id="search_id2" class="a_p1_search_input" placeholder="请输入查询词汇"/>
+	    </div>
+	    <div class="navbar-nav-search">
+	        <span>职员姓名</span><input id="search_id3" class="a_p1_search_input" placeholder="请输入查询词汇"/>
+	    </div>
+	    <div class="navbar-nav-search">
+	        <span>组织机构</span><input id="search_id4" class="a_p1_search_input" placeholder="请输入查询词汇"/>
+	    </div>
+	    <div class="navbar-nav-search">
+	        <span>职务</span>
+	        <select id="search_id5" class="a_p1_search_select" placeholder="请输入查询词汇">
+	            <option value="java">Java</option>
+	            <option value="c">C</option>
+	            <option value="basic">Basic</option>
+	            <option value="perl">Perl</option>
+	            <option value="python">Python</option>
+	        </select>
+	    </div>
+	    <div class="navbar-nav-search">
+	        <input onclick="submitData()" type="button" class="a_p1_search_btn" value="搜索"/>
+	    </div>
+	</div>
+	
+	<div class="a_p1_main ">
+	    <table id="user_m_table"></table>
+	</div>
+
+
+</div>-->
+
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<!-- <script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script> -->
+<script src="../../static/js/samples/demo_list.js" th:src="@{/js/samples/demo_list.js}"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	<title></title>
+	<link rel="stylesheet" href="../static/css/all_page.css" th:href="@{/css/all_page.css}"/>
+    <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet" type="text/css"
+          media="all"/>
+    <link href="../static/css/search_page.css" th:href="@{/css/search_page.css}" rel="stylesheet" type="text/css"
+          media="all"/>
+          
+     <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row search-box-sf">
+		<div th:replace="fragments/base :: search_header"></div>
+	</div>
+	<div>
+        <hr style="margin-top: 5px; margin-bottom: 10px;"/>
+    </div>
+    
+    <div id="bd_snap_txt">
+		<div>
+			您查询的关键词是：
+			<span style="color:black;background-color:#ffff66;padding:0 3px;font-weight:bold" th:text="${queryKey}"></span>
+			<span style="margin-left:5px" th:text="'以下是该网页在北京时间'+${#dates.format(snatchDate,'yyyy年MM月dd日 HH:mm:ss')}+' 的快照；'"></span>
+		</div>
+		<div th:utext="${content}">
+		
+		</div>
+	</div>
+</div>
+
+<script src="../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../static/js/bootstrap-3.1.1.min.js" th:src="@{/js/bootstrap-3.1.1.min.js}"></script>
+<script src="../static/js/jquery-scrolltofixed-min.js" th:src="@{/js/jquery-scrolltofixed-min.js}"></script>
+<script src="../static/js/bootstrap-paginator.js" th:src="@{/js/bootstrap-paginator.js}"></script>
+</body>
+</html>

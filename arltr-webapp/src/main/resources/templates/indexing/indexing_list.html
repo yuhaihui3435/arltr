@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+
+    <title>索引维护列表</title>
+
+    <link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+    <link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+    <link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+    <link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+
+	<!--[if lt IE 9]>
+	<script src="../../static/js/html5shiv.min.js"></script>
+	<script src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+    <div class="easyui-layout cm-content">
+        <div data-options="region:'center'" title="索引维护列表" class="cm-center">
+            <div class="cm-center-detail">
+                <div class="cm-demo-container">
+                    <div class="cm-search-tr">
+                        <form action="" id="indexingform" method="post">
+                            <table class="cm-sbox-table3">
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">开始时间</span>
+                                            <input id="startTime" name="startTime" class="easyui-datebox"
+                                                   data-options="editable:false" style="width: 60%">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">采集类型</span>
+                                            <input id="importType" name="importType" class="easyui-combobox " style="width: 60%">
+                                            <!-- <select id="importType" name="importType" class="easyui-combobox"
+                                                    style="width: 60%">
+                                                <option value="0"></option>
+                                                <option th:each="importType:${importTypeList}"
+                                                        th:value="${importType.value}"
+                                                        th:text="${importType.valueName}">
+                                                </option>
+                                            </select> -->
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">任务类型</span>
+                                            <!-- <select id="taskType" class="easyui-combobox" style="width: 60%">
+                                                <option value="0"></option>
+                                                <option th:each="taskType:${taskTypeList}"
+                                                        th:value="${taskType.value}" th:text="${taskType.valueName}">
+                                                </option>
+                                            </select> -->
+											<input id="taskType" name="taskType" class="easyui-combobox " style="width: 60%">
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="cm-sbox-td">
+                                            <span class="cm-sbox-span">任务状态</span>
+                                            <!-- <select id="taskState" name="taskState" class="easyui-combobox"
+                                                    style="width: 60%">
+                                                <option value="0"></option>
+                                                <option th:each="taskState:${taskStateList}"
+                                                        th:value="${taskState.value}" th:text="${taskState.valueName}">
+                                                </option>
+                                            </select> -->
+                                            <input id="taskState" name="taskState" class="easyui-combobox " style="width: 60%">
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <div class="cm-sbox-td cm-text-center">
+                                        	<span class="cm-sbox-span cm-text-center"></span>
+                                            <input type="button" class="cm-search-button" value="搜索"
+                                                   onclick="submitData()"/>
+                                            <input type="reset" class="cm-search-button" onclick="onClear()"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div>
+                        <table id="indexing_m_table"></table>
+                        <div id="tb">
+                            <div class="cm-toolbar">
+                                <a href="#" class="easyui-linkbutton authority-insert icon-bg-blue" iconCls="icon-manual"
+                                   onclick="setImportType()">手动更新</a>
+                                <a href="#" class="easyui-linkbutton authority-insert icon-bg-blue" iconCls="icon-timer"
+                                   onclick="setTimer()">设置定时器</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 设置定时器弹出框 -->
+            <div id="cron_task_dialog" class="easyui-dialog" style="display: none;">
+                <form id="cron_task_form" method="post">
+                    <input type="hidden" id="id" name="id">
+                    <table class="cm-sbox-table2">
+                        <tr>
+                            <td>
+                                <span class="cm-sbox-span">频率</span>
+                                <input id="frequency" name="frequency" class="easyui-combobox" style="width:73%">
+                            </td>
+                            <td>
+                                <span class="cm-sbox-span">开始时间</span>
+                                <input class="easyui-timespinner" id="startTimeTimer"
+                                       style="width: 73%">
+                                <input type="hidden" id="startTime_real" name="startTime">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="cm-sbox-span">采集类型</span>
+                                <input id="importTypeTimer" name="importType" class="easyui-combobox" style="width:73%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="cm-sbox-span">创建者</span>
+
+                                <div class="cm-sbox-div" id="createByShow"></div>
+                                <input type="hidden" id="createByName" name="createByName">
+                                <input type="hidden" id="createBy" name="createBy">
+                            </td>
+                            <td>
+                                <span class="cm-sbox-span">创建时间</span>
+
+                                <div class="cm-sbox-div" id="createAtShow"></div>
+                                <input type="hidden" id="createAt" name="createAt">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="cm-sbox-span">更新者</span>
+
+                                <div class="cm-sbox-div" id="updateByShow"></div>
+                                <input type="hidden" id="updateByName" name="updateByName">
+                                <input type="hidden" id="updateBy" name="updateBy">
+                            </td>
+                            <td>
+                                <span class="cm-sbox-span">更新时间</span>
+
+                                <div class="cm-sbox-div" id="updateAtShow"></div>
+                                <input type="hidden" id="updateAt" name="updateAt">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <div class="cm-btn-a">
+                    <a href="javascript:void(0)" class="easyui-linkbutton submit authority-insert"
+                       iconCls="icon-save" onclick="saveCronTask()">保存</a>
+                </div>
+            </div>
+
+            <!-- 手动更新弹出框 -->
+            <div id="manual_update_dialog" class="easyui-dialog" style="display: none;">
+                <table class="cm-table">
+                    <tr>
+                        <td>
+                            <span class="cm-sbox-span">采集类型</span>
+                            <input id="importTypeManual" name="importType" class="easyui-combobox" style="width:73%">
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="cm-btn-a">
+                    <a href="javascript:void(0)" class="easyui-linkbutton submit authority-insert"
+                       iconCls="icon-save" onclick="confirm()">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+<script src="../../static/js/indexing/indexing_list.js" th:src="@{/js/indexing/indexing_list.js}"></script>
+</body>
+</html>

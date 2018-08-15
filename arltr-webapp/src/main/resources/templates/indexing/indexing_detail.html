@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	<title>索引维护详情</title>
+	<link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+	<link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+	<link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+	<link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+	
+	<!--[if lt IE 9]>
+	<script src="../../static/js/html5shiv.min.js"></script>
+	<script src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="layout-body">
+<div th:replace="fragments/base :: header"></div>
+	<div class="cm-main">
+		<div class="easyui-layout cm-content">
+			<div data-options="region:'center',
+            		tools:[{
+					iconCls:'icon-back',
+					handler:function(){
+						goBack();
+					}
+				}]" title="索引维护详情" class="cm-center">
+				<div class="cm-center-detail">
+					<div class="cm-demo-container">
+							<form id="indexing_detail_form" method="post">
+							<table class="cm-sbox-table2">  
+								<tr>
+									<td>
+										<div class="cm-sbox-td">
+											<span class="cm-sbox-span ">开始时间</span>
+		                                       <div class="cm-sbox-div" id="startTime" th:text="${#dates.format(dataImportLogs.startTime,'yyyy-MM-dd HH:mm:ss')}"></div>
+										</div>
+									</td>
+									<td>
+										<div class="cm-sbox-td">
+											<div class="cm-sbox-span ">结束时间</div>
+	                                        <div class="cm-sbox-div" id="endTime" th:text="${#dates.format(dataImportLogs.endTime,'yyyy-MM-dd HH:mm:ss')}"></div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cm-sbox-td">
+											<span class="cm-sbox-span ">任务类型</span>
+	                                        <div class="cm-sbox-div" id="taskType" th:text="${dataImportLogs.taskTypeName}"></div>
+	                                     </div>
+									</td>
+									<td>
+										<div class="cm-sbox-td">
+											<span class="cm-sbox-span ">采集类型</span>
+	                                        <div class="cm-sbox-div" id="importType" th:text="${dataImportLogs.importTypeName}"></div>
+	                                     </div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cm-sbox-td">
+											<span class="cm-sbox-span ">任务状态</span>
+	                                        <div class="cm-sbox-div" id="taskState" th:text="${dataImportLogs.taskStateName}"></div>
+	                                     </div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="cm-sbox-td">
+											<div class="cm-sbox-span ">执行者名称</div>
+	                                        <div class="cm-sbox-div" id="executorName" th:text="${dataImportLogs.executorName}"></div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div class="cm-sbox-td">
+											<div class="cm-sbox-spanl ">任务信息</div>
+											<input class="easyui-textbox" data-options="multiline:true"
+												   style="width:86%;height:70px" id="taskInfo" th:value="${dataImportLogs.taskInfo}" disabled="disabled">
+										</div>
+									</td>
+								</tr>
+							</table>
+							</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+</div>
+
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+
+</body>
+</html>

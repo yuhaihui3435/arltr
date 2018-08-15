@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="../../static/themes/default/easyui.css" th:href="@{/themes/default/easyui.css}"/>
+    <link rel="stylesheet" href="../../static/themes/icon.css"  th:href="@{/themes/icon.css}"/>
+    <link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+    <!--<link rel="stylesheet" href="../../static/css/all_page.css" th:href="@{/css/all_page.css}"/>-->
+    <link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+</head>
+<body>
+
+<div th:fragment="header" >
+<div class="cm-base-header">
+    <div class="cm-base-area">
+        <a href="/" class="navbar-brand">
+            <img src="../../static/images/aviation_logo.png" th:src="@{/images/aviation_logo.png}" alt="a_p1_logo"/>
+            中国航天科工二院
+        </a>
+        <div class="navbar-nav">
+            <ul class="cm-float-right">
+                <li>
+                    <a class="nav-link"><img src="../../static/images/admin.png" th:src="@{/images/admin.png}" alt=""/>你好，<span th:text="${session.user.employeeName}">用户</span></a>
+                </li>
+                <li>
+                    <a href="/" class="nav-link cm-base-top-btn1"><img src="../../static/images/home_hover.png"  th:src="@{/images/home_hover.png}"alt=""/><span>回首页</span></a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" onclick="loginOut_bt()"><img src="../../static/images/exit.png" th:src="@{/images/exit.png}" alt=""/>退出</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="find_nav_list">
+<!-- (${navigator.uri} == null or ${navigator.uri} == '') class="find_nav_cur"-->
+	<div th:fragment="menu" >
+		<ul >
+			<li th:each="navigator : ${commonNavigators}" th:class="${navigator.id}  == ${session.sessionNavId} ? 'find_nav_cur' : ''">
+				<a th:href="((${navigator.uri} == null or ${navigator.uri}) == ''  ? '/' :  ${navigator.uri} ) + '?sessionNavId=' + ${navigator.id}">
+					<img src="../../static/images/user_manage.png" th:src="@{${navigator.icon}}" alt=""  class="find_li_img1"/>
+					[[${navigator.name}]]
+				</a>
+			</li>
+			<li class="sideline" style="display: none">
+       		</li>
+		</ul>
+	</div>
+</div>
+</div>
+
+<div th:fragment="search_header" >
+	<div class="col-sm-1 search-top-logo">
+            <img src="../static/images/aviation_logo.png" th:src="@{/images/aviation_logo.png}"
+                 alt="Responsive image">
+        </div>
+        <div class="col-sm-7">
+            <div class="navbar-brand search-top-text">中国航天科工二院</div>
+        </div>
+        <div class="col-sm-4 navbar-nav padding-top-15">
+            <ul style="float: right">
+           <li><a href="#" class="nav-link">
+               <img src="../static/images/admin.png" th:src="@{/images/admin.png}"
+                    alt=""/>你好，<span th:text="${session.user.employeeName}">用户</span></a></li>
+           <li th:if="${session.isAdmin}"><a href="/user/list?sessionNavId=1" class="nav-link a_p1_btn1">
+               <img src="../static/images/icon-role-m-hover.png" th:src="@{/images/icon-role-m-hover.png}"
+                    alt=""/><span>控制台</span></a>
+           </li>
+           <li><a href="#" class="nav-link" onclick="loginOut_bt()" >
+               <img src="../static/images/exit.png" th:src="@{/images/exit.png}" alt="" />退出</a></li>
+      </ul>
+  	</div>
+</div>
+
+<div class="find_nav_list">
+    <ul>
+        <li class="find_nav_cur">
+            <a href="javascript:void(0)">
+                <img src="../../static/images/user_manage_hover.png" th:src="@{/images/user_manage_hover.png}" alt=""  class="find_li_img1"/>
+                用户管理
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" >
+                <img src="../../static/images/property_manage.png" th:src="@{/images/property_manage.png}" alt="" class="find_li_img1"/>
+                权限管理
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" >
+                <img src="../../static/images/shielding_word.png" th:src="@{/images/shielding_word.png}" alt="" class="find_li_img1"/>
+                屏蔽词汇
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)">
+                <img src="../../static/images/statistical_analysis.png" th:src="@{/images/statistical_analysis.png}" alt="" class="find_li_img1"/>
+                统计分析
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)">
+                <img src="../../static/images/intelligent_semantics.png"  th:src="@{/images/intelligent_semantics.png}" alt="" class="find_li_img1"/>
+                智能语义
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)">
+                <img src="../../static/images/index_maintenance.png" th:src="@{/images/index_maintenance.png}" alt="" class="find_li_img1"/>
+                索引维护
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)">
+                <img src="../../static/images/space_word.png" th:src="@{/images/space_word.png}" alt="" class="find_li_img1"/>
+                航天词汇
+            </a>
+        </li>
+        <li class="sideline">
+        </li>
+    </ul>
+</div>
+
+
+<!-- <div th:fragment="menu-left">
+ -->    <div th:fragment="menu-left" class="cm-main-left">
+        <div class="cm-left-c">
+            <div class="cm-main-left-content">
+                <div id="firstpane" class="menu_list" th:each="navigator : ${commonNavigators}" th:if="${navigator.id}  == ${session.sessionNavId}">
+            		<div th:each="menu : ${navigator.children}">
+            			<h3  class="menu_head " 
+            			th:class="(${menu.id}  == ${session.sessionMenuId}) ? 'menu_head current menu_body-check' : 'menu_head'">[[${menu.name}]]
+						</h3>
+						<div th:if="${menu.children.size()} gt 0" style="display:none"  class="menu_body">
+							<a  th:each="item : ${menu.children}" 
+							th:class="(${item.id}  == ${session.sessionItemId}) ? 'menu_body-check' : ''"
+							th:href="${item.uri}  + '?sessionItemId=' + ${item.id}">[[${item.name}]]</a>
+						</div>
+            		</div>
+            	</div>
+            </div>
+        </div>
+    </div>
+<!-- </div>
+ -->
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+</body>
+</html>

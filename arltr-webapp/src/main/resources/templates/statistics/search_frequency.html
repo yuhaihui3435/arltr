@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    
+	<title>搜索频次统计</title>
+	<link rel="stylesheet" href="../../static/themes/material/easyui.css" th:href="@{/themes/material/easyui.css}"/>
+	<link rel="stylesheet" href="../../static/themes/icon.css" th:href="@{/themes/icon.css}"/>
+	<link rel="stylesheet" href="../../static/themes/color.css" th:href="@{/themes/color.css}"/>
+	<link rel="stylesheet" href="../../static/css/style1.css" th:href="@{/css/style1.css}"/>
+
+</head>
+<body>
+
+<div th:replace="fragments/base :: header"></div>
+<div class="cm-main">
+<div th:replace="fragments/base :: menu-left"></div>
+    <div class="cm-main-right">
+	<div class="easyui-layout cm-content">
+		<div data-options="region:'center'" title="搜索频次统计列表" class="cm-center">
+			<div class="cm-center-detail">
+				<div class="cm-demo-container">
+				<div class="cm-search-tr">
+					<form action="/statistics/frequencydata" id="searchmform" method="post">
+						<table class="cm-sbox-table2">
+							<tr>
+								<td>
+									<div class="cm-sbox-td">
+										<span class="cm-sbox-span cm-text-center">搜索关键词</span>
+										<input class="cm-sbox-input" id="queryKeyWord">
+									</div>
+								</td>
+								<td>
+									<div class="cm-sbox-td">
+										<input type="button" class="cm-search-button" value="搜索" onclick="queryData()"/>
+										<input type="button" class="cm-search-button" value="重置" onclick="onClear()" />
+									</div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+					<div>
+						<table id="view_m_table"></table>
+<!-- 						<div id="tb"> -->
+<!-- 							<div class="cm-toolbar"> -->
+<!-- 								<a href="/synonym/detail/new" class="easyui-linkbutton authority-insert" iconCls="icon-add" >新增</a> -->
+<!-- 								<a href="#" class="easyui-linkbutton authority-delete" iconCls="icon-remove" onclick="doDelete()">批量删除</a> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script src="../../static/jquery.min.js" th:src="@{/jquery.min.js}"></script>
+<script src="../../static/jquery.easyui.min.js" th:src="@{/jquery.easyui.min.js}"></script>
+<script src="../../static/easyui-lang-zh_CN.js" th:src="@{/easyui-lang-zh_CN.js}"></script>
+<script src="../../static/js/common/base.js" th:src="@{/js/common/base.js}"></script>
+<script src="../../static/js/statistics/search_frequency.js" th:src="@{/js/statistics/search_frequency.js}"></script>
+</body>
+</html>

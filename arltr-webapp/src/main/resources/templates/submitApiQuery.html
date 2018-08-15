@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <title></title>
+</head>
+<body>
+<form action="/search" id="form" method="get">
+    <input type="hidden"  name="query" th:attr="value=${query}" >
+</form>
+</body>
+<script>
+
+    var doc=document.getElementById("form");
+    doc.submit();
+</script>
+</html>
