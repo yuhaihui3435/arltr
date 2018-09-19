@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * solr客户端工具类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @Component

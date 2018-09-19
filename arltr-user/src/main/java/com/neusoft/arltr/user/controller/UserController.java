@@ -40,7 +40,7 @@ import com.neusoft.arltr.user.service.MenuService;
 /**
  * 用户信息控制器
  * 
- * @author zhanghaibo
+ *
  *
  */
 @RestController

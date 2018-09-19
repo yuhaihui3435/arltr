@@ -21,7 +21,7 @@ import com.neusoft.arltr.constant.SessionKey;
 /**
  * 权限验证拦截器
  * 
- * @author zhanghaibo
+ *
  *
  */
 public class AuthenticatingInterceptor implements HandlerInterceptor {

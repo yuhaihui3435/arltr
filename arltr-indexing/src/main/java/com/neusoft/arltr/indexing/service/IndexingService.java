@@ -1,29 +1,11 @@
 package com.neusoft.arltr.indexing.service;
 
-import java.beans.PropertyDescriptor;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neusoft.arltr.common.constant.Constant;
 import com.neusoft.arltr.common.entity.indexing.CronTask;
 import com.neusoft.arltr.common.entity.indexing.DataImportLogs;
 import com.neusoft.arltr.common.entity.indexing.PdmDocInfo;
+import com.neusoft.arltr.common.entity.indexing.PdmDocInfoFail;
 import com.neusoft.arltr.common.entity.search.Result;
 import com.neusoft.arltr.common.entity.user.User;
 import com.neusoft.arltr.indexing.model.Project;
@@ -32,6 +14,31 @@ import com.neusoft.arltr.indexing.repository.PdmDocInfoRepository;
 import com.neusoft.arltr.indexing.repository.SolrRepository;
 import com.neusoft.arltr.indexing.utils.SolrDataConverter;
 import com.neusoft.arltr.indexing.ws.client.PdmClient;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class IndexingService {
@@ -62,6 +69,19 @@ public class IndexingService {
 	
 	/**数据状态：已获取文件路径 */
 	private static final int DATA_STATE_PATHGETED = 1;
+	//yhh add pdm系统提供的连接有可能出现无效的情况，增加数据状态 连接无效
+	/**数据状态： 路径无效**/
+	public static final int DATA_STATE_INVALIDPATH=3;
+
+//	public static final List<Integer> DATA_STATE_INVALID=new ArrayList<>();
+//
+//	{
+//		DATA_STATE_INVALID.add(DATA_STATE_INVALIDPATH);
+//		DATA_STATE_INVALID.add(PdmService.DATA_STATE_INDEX_FAIL);
+//		DATA_STATE_INVALID.add(DATA_STATE_UNDISPOSED);
+//
+//
+//	}
 	
 	@Autowired
 	SolrRepository solrRepository;
@@ -77,6 +97,9 @@ public class IndexingService {
 	
 	@Autowired
 	PdmService pdmService;
+
+	@Autowired
+	PdmDocInfoFailService pdmDocInfoFailService;
 	
 	private StringBuffer errorInfo;
 	
@@ -113,7 +136,7 @@ public class IndexingService {
 	}
 	
 	@Async
-	public void createIndexOfPdm(DataImportLogs task) {
+	public void createIndexOfPdm(DataImportLogs task,Date date) {
 		
 		logger.info("===========PDM数据索引处理 START============");
 		
@@ -122,13 +145,15 @@ public class IndexingService {
 		try {
 			
 			// 获取文档列表
-			readDocList(task);
-			
-			// 获取文档的文件路径并持久化
+			readDocList(task,date);
+
+
+				// 获取文档的文件路径并持久化
 			readPathOfDocFile();
-			
-			// 建立文档的solr索引
+
+				// 建立文档的solr索引
 			createIndexOfPdmDoc();
+
 			
 		} catch (Exception e) {
 			this.appendErrorInfo("PDM数据同步错误【" + e.getMessage() + "】");
@@ -136,10 +161,10 @@ public class IndexingService {
 		
 		if (this.errorInfo.length() > 0) {
 			task.setTaskState(INDEX_TASK_STATE_EXCEPTION);
-			task.setTaskInfo(this.errorInfo.toString());
+			task.setTaskInfo(task.getTaskInfo().replace("进行中",this.errorInfo.toString()));
 		} else {
 			task.setTaskState(INDEX_TASK_STATE_DONE);
-			task.setTaskInfo("PDM数据同步已完成");
+			task.setTaskInfo(task.getTaskInfo().replace("进行中","PDM数据同步已完成"));
 		}
 		
 		task.setEndTime(new Date());
@@ -148,27 +173,28 @@ public class IndexingService {
 		logger.info("===========PDM数据索引处理 END============");
 	}
 	
-	private void readDocList(DataImportLogs task) {
+	private void readDocList(DataImportLogs task,Date date) throws Exception {
 		
 		String dataXml = "";
+
 		
 		// 从PDM接口获取文档列表
-		if (task.getImportType() == INDEX_IMPORT_TYPE_ALL) {
-			dataXml = pdmClient.getDataXML(null);
-		} else {
-			dataXml = pdmClient.getDataXML(new Date());
-		}
+//		if (task.getImportType() == INDEX_IMPORT_TYPE_ALL) {
+//			dataXml = pdmClient.getDataXML(null);
+//		} else {
+			dataXml = pdmClient.getDataXML(date);
+//		}
 		
 		// 解析接口返回值并持久化
 		parseDataXml(dataXml);
 	}
 	
-	private void parseDataXml(String xml) {
+	private void parseDataXml(String xml) throws Exception {
 		
 		logger.info("===========PDM文档列表数据解析 START============");
 		logger.info("解析前数据：" + xml);
 		ObjectMapper objectMapper = new ObjectMapper();
-		
+		PdmDocInfo pdmDocInfo=null;
 		try {
 			
 			StringReader read = new StringReader(xml);
@@ -224,7 +250,11 @@ public class IndexingService {
 	        						} else {
 	        							doc.setDataState(DATA_STATE_UNDISPOSED);
 	        						}
-	        						
+									//yhh add  从pdm获取到的同步数据中，如果之前曾经处理过的文档数据，本次针对这个数据进行更新处理。
+									pdmDocInfo=pdmDocInfoRepository.findByDocumentIdAndVersionSno(doc.getDocumentId(),doc.getVersionSno());
+									if(null!=pdmDocInfo)
+											doc.setId(pdmDocInfo.getId());
+									doc.setCreateAt(new Date());
 	        						pdmDocInfoRepository.save(doc);
 	        					}
 	        				}
@@ -236,7 +266,8 @@ public class IndexingService {
 			logger.error("PDM文档列表数据解析出错");
 			logger.error(e.getMessage(), e.getCause());
 			e.printStackTrace();
-			this.appendErrorInfo("PDM文档列表数据解析出错【" + e.getMessage() + "】");
+			this.appendErrorInfo("PDM文档数据同步阶段出错,无法获取到增量更新文档元数据【" + e.getLocalizedMessage() + "】");
+			throw e;
 		}
 		logger.info("===========PDM文档列表数据解析 END============");
 	}
@@ -253,14 +284,44 @@ public class IndexingService {
 			try {
 				// 解析接口返回值
 				String filePath = parseFileXml(fileXml);
-				
 				doc.setFilePath(filePath);
-				doc.setDataState(DATA_STATE_PATHGETED);
+				//yhh modify
+				//doc.setDataState(DATA_STATE_PATHGETED);
+				//如果获取的pdm文件地址为空，将该临时数据状态设置为连接无效
+				doc.setDataState(org.apache.commons.lang3.StringUtils.isBlank(filePath)?DATA_STATE_INVALIDPATH:DATA_STATE_PATHGETED);
+				//yhh add
 				pdmDocInfoRepository.save(doc);
+				if(org.apache.commons.lang3.StringUtils.isBlank(filePath)){
+					PdmDocInfoFail pdmDocInfoFail=new PdmDocInfoFail();
+					pdmDocInfoFail.setDocId(doc.getDocumentId());
+					pdmDocInfoFail.setPdmDocInfoId(doc.getId());
+					pdmDocInfoFail.setDocFilePath(doc.getFilePath());
+					pdmDocInfoFail.setDocUrl(doc.getUrl());
+					pdmDocInfoFail.setDocTitle(doc.getDocumentTitle());
+					pdmDocInfoFail.setFailReason("PDM文档路径数据为空，获取filePath阶段出错");
+					pdmDocInfoFail.setFailState(DATA_STATE_INVALIDPATH);
+					pdmDocInfoFailService.addPdmDocInfoFail(pdmDocInfoFail);
+				}
 			
 			} catch (Exception e) {
-				this.appendErrorInfo("PDM文档路径数据解析出错【" + e.getMessage() + "】");
-				continue;
+				logger.info("PDM文档路径数据解析出错：报文为【" + fileXml + "】");
+//				this.appendErrorInfo(","+doc.getDocumentId());
+				if(this.errorInfo.length()==0||this.errorInfo.indexOf("PDM文档路径失败错误")<0)
+					this.appendErrorInfo("PDM文档路径失败错误");
+				doc.setDataState(DATA_STATE_INVALIDPATH);
+				pdmDocInfoRepository.save(doc);
+				//yhh add
+				PdmDocInfoFail pdmDocInfoFail=new PdmDocInfoFail();
+				pdmDocInfoFail.setDocId(doc.getDocumentId());
+				pdmDocInfoFail.setPdmDocInfoId(doc.getId());
+				pdmDocInfoFail.setDocFilePath(doc.getFilePath());
+				pdmDocInfoFail.setDocUrl(doc.getUrl());
+				pdmDocInfoFail.setDocTitle(doc.getDocumentTitle());
+				pdmDocInfoFail.setFailReason("PDM文档路径数据解析出错,获取filePath阶段出错【" + e.getLocalizedMessage() + "】");
+				pdmDocInfoFail.setFailState(DATA_STATE_INVALIDPATH);
+				pdmDocInfoFailService.addPdmDocInfoFail(pdmDocInfoFail);
+				//yhh add end
+				//continue;
 			}
 		}
 		
@@ -344,10 +405,22 @@ public class IndexingService {
 		List<PdmDocInfo> docList = pdmDocInfoRepository.findByDataState(DATA_STATE_PATHGETED);
 		
 		List<String> finishedTaskList = Collections.synchronizedList(new ArrayList<String>());
-		
+		int i=1;
 		for (PdmDocInfo doc : docList) {
-			
 			pdmService.createIndexOfPdmDoc(doc, finishedTaskList, errorInfo);
+			Thread.currentThread().sleep(1500);
+//			控制每三个提交处理，三个处理完再继续处理
+//			if(i%2==0) {
+//				if(finishedTaskList.size() == docList.size())continue;
+//				logger.info("已经发起了二个线程处理，现在开启等待");
+//				while (!(finishedTaskList.size()  == i)) {
+////					logger.info(finishedTaskList.size());
+////					Thread.currentThread().sleep(1000);
+//				}
+//				logger.info("已经发起的三个线程处理结束，开始下一组线程");
+//				Thread.currentThread().sleep(15000);
+//			}
+//			i++;
 		}
 		
 		if (docList != null) {
@@ -406,8 +479,39 @@ public class IndexingService {
 //		dataImportLogsNew.setEndTime(new Date());
 //		dataImportLogsUpdate = this.indexingRepository.save(dataImportLogsNew);
 		
-		createIndexOfPdm(dataImportLogsNew);
+		createIndexOfPdm(dataImportLogsNew,new Date());
 		
+		return dataImportLogsNew;
+	}
+
+	/**
+	 *
+	 * @param taskType 任务类型
+	 * @param user	用户 系统更新时为null
+	 * @param date 更新日期
+	 * @param taskInfo 任务信息
+	 * @return
+	 */
+//	@Async
+	public DataImportLogs fullAmountInsertData(short taskType,User user,String date,String taskInfo){
+		DataImportLogs dataImportLogs = new DataImportLogs();
+
+		dataImportLogs.setStartTime(new Date());
+		dataImportLogs.setTaskState(INDEX_TASK_STATE_DOING);
+		dataImportLogs.setTaskType(taskType);
+		dataImportLogs.setImportType((short) 1);
+		dataImportLogs.setExecutor(user==null?0:user.getId());
+		dataImportLogs.setExecutorName(user==null?"系统自动更新":user.getUserName());
+		dataImportLogs.setTaskInfo(taskInfo+"数据日期："+date+"|进行中");
+		DataImportLogs dataImportLogsNew = this.indexingRepository.save(dataImportLogs);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		try {
+			createIndexOfPdm(dataImportLogsNew, sdf.parse(date));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
 		return dataImportLogsNew;
 	}
 	

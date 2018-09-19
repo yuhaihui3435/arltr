@@ -1,3 +1,19 @@
+
+Date.prototype.Format = function (fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
 /**
  * 提交数据
  */
@@ -32,7 +48,14 @@ $(function() {
 	        {field:'startTime',title:'开始时间',width:"15%",sortable:false,formatter:getDateFormatter},
 	        {field:'endTime',title:'结束时间',width:"15%",sortable:false,formatter:getDateFormatterCustom},
 	        {field:'taskTypeName',title:'任务类型',width:"20%",sortable:false},
-	        {field:'importTypeName',title:'采集类型',width:"20%",sortable:false},
+	        {field:'importTypeName',title:'采集类型',width:"20%",sortable:false,formatter:function (value,rec) {
+					if(rec.importType=='1'){
+						var index=rec.taskInfo.indexOf("|");
+						if(index>0)
+							return value+'('+rec.taskInfo.substring(0,index)+")";
+					}
+					return value;
+                }},
 	        {field:'taskStateName',title:'任务状态',width:"20%",sortable:false},
 	        {field:'opt',title:'操作', width:"10%",align:'center',
 	            formatter:function(value,rec){
@@ -50,6 +73,52 @@ $(function() {
 	        $("#taskState").combobox("loadData", data.taskStateList);
 	    }
 	});
+	var isFirst=true;
+	$('#tab').tabs({
+        onSelect:function(title,index){
+			if(index==1&&isFirst){
+				isFirst=false;
+                $('#indexing_pfq_table').dg({
+                    remoteSort:true,
+                    fitColumns:true,
+                    url: "/indexing/pdm/fail/query",
+                    singleSelect : true,
+                    columns:[[
+                        {field:'docId',title:'文档ID',width:"20%",sortable:false},
+                        {field:'docTitle',title:'文档标题',width:"20%",sortable:false},
+                        {field:'failStateTxt',title:'失败原因',width:"10%",sortable:false},
+                        {field:'cAt',title:'创建时间',width:"15%",sortable:false,formatter:getDateFormatter},
+                        {field:'uAt',title:'最后更新时间',width:"15%",sortable:true,formatter:getDateFormatter},
+                        {field:'opt',title:'操作', width:"20%",align:'center',
+                            formatter:function(value,rec){
+                        		var failReason=rec.failReason;
+                        		failReason=failReason.replace(/\'/g,"");
+                        		failReason=failReason.replace(/\"/g,"");
+                        		failReason=failReason.replace(/\</g,"").replace(/\>/g,"");
+                                failReason=failReason.replace(/\;/g,"").replace(/\>/g,"");
+
+                                $('#failReason').text(failReason);
+                                var btn =
+                                    '<a class="editcls" href="javascript:void(0)" onclick="viewPdmFailDetail()">错误详情</a>';
+                                return btn;
+                            }
+                        }
+                    ]],
+                    // method:"post",
+                    onLoadSuccess:function(data){
+                        $('.editcls').linkbutton({text:'查看详细',plain:true,iconCls:'icon-edit'});
+                    }
+                });
+			}
+
+        }
+
+    })
+
+
+
+
+
 });
 
 /**
@@ -103,7 +172,7 @@ $("#taskState").combobox({
  * 定时器弹出框
  */
 $("#cron_task_dialog").dialog({
-	title: "设置定时器",
+	title: "设置增量定时器",
 	width:'800px',
 	height:'300px',
 	modal: true,
@@ -283,4 +352,125 @@ function confirm(){
 		$('#manual_update_dialog').dialog('close');
 		$('#indexing_m_table').datagrid("reload");
 	});
+}
+
+
+function pdmFailQueryClear(){
+    $('#pdmFailQueryForm').form('clear');
+    $('#pfqStartTime').val("");
+	$('#pfqEndTime').val("");
+}
+
+function pdmFailQuerySubmit() {
+    var opts = $('#indexing_pfq_table').datagrid('options');
+    var queryParameter=new Object();
+    /** 绑定查询字段 */
+    if($("#pfqStartTime").val()!=''){
+        queryParameter.startTime = new Date($("#pfqStartTime").val().replace(/\-/g,'/'));
+    }
+
+    /** 绑定查询字段 */
+    if($("#pfqEndTime").val()!=''){
+        queryParameter.endTime = new Date($("#pfqEndTime").val().replace(/\-/g,'/'));
+    }
+
+    queryParameter.docId = $("#docId").val();
+    queryParameter.docTitle = $("#docTitle").val() ;
+    queryParameter.failState = $("#failState").val();
+    opts.queryParams=queryParameter;
+    $('#indexing_pfq_table').datagrid("reload");
+}
+
+function viewPdmFailDetail() {
+    $('#w').window('open')
+}
+
+$("#fullAmount_task_dialog").dialog({
+    title: "设置全量更新定时器",
+    width:'800px',
+    height:'300px',
+    modal: true,
+    closed: true
+    /*	onClose : function() {
+
+        }*/
+})
+
+
+function setFullAmountTimer() {
+    $('#fullAmount_task_dialog').dialog('open');
+    $("#sDate").datebox('setValue','')
+    $("#eDate").datebox('setValue','')
+    $("#taskDate").datebox('setValue','')
+    $('#taskTime').timespinner('setValue','');
+}
+
+/**
+ * 保存定时任务
+ * @returns
+ */
+function saveFullAmountCronTask(){
+
+        var sDate=$("#sDate").val()
+		var eDate=$("#eDate").val()
+		var taskDate=$("#taskDate").val()
+        var taskTime = $('#taskTime').timespinner('getValue');
+
+		var curTime = new Date().Format('yyyy-MM-dd');
+		//把字符串格式转化为日期类
+		// var sd = new Date(Date.parse(sDate));
+		// var ed = new Date(Date.parse(eDate));
+		//var td =new Date(Date.parse(taskDate));
+
+		if(sDate==''){
+            $.messager.alert('提示信息', '采集开始日期必填','error');
+            return;
+		}
+		if(eDate==''){
+			$.messager.alert('提示信息', '采集结束日期必填','error');
+			return;
+		}
+		if(taskDate==''){
+			$.messager.alert('提示信息', '任务开始日期必填','error');
+			return;
+		}
+		if(taskTime==''){
+			$.messager.alert('提示信息', '任务开始时间必填','error');
+			return;
+		}
+
+
+
+		if(sDate>eDate){
+            $.messager.alert('提示信息', '采集开始日期必须小于结束日期','error');
+            return;
+		}
+
+		if(eDate>curTime){
+            $.messager.alert('提示信息', '采集结束日期不能大于当日','error');
+            return;
+		}
+
+		if(taskDate<curTime){
+            $.messager.alert('提示信息', '任务开始日期不能小于当日','error');
+            return;
+		}
+
+		var taskDateTime=taskDate+" "+taskTime
+		taskDateTime=new Date(Date.parse(taskDateTime))
+		if(taskDateTime<=new Date()){
+            $.messager.alert('提示信息', '任务开始时间必须大于当前时间','error');
+            return;
+		}
+
+        var param=new Object();
+        param.sDate=sDate;
+        param.eDate=eDate;
+        param.taskDate=taskDate;
+        param.taskTime=taskTime;
+
+        $.httpPost("/indexing/timer/saveFullAmount",param, true, function(resp) {
+            $('#fullAmount_task_dialog').dialog('close');
+        });
+
 }

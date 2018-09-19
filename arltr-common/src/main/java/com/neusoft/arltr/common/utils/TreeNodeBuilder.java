@@ -6,7 +6,7 @@ package com.neusoft.arltr.common.utils;
 /**
  * EasyUI树节点创建接口
  * 
- * @author zhanghaibo
+ *
  *
  */
 public interface TreeNodeBuilder<T> {

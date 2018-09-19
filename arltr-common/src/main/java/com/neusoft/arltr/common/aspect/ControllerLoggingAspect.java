@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * 业务Service日志处理
  * 
- * @author zhanghaibo
+ *
  *
  */
 @Aspect

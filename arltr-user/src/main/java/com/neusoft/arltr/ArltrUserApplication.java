@@ -11,7 +11,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 /**
  * 搜索服务启动程序
  * 
- * @author zhanghaibo
+ *
  *
  */
 @SpringBootApplication

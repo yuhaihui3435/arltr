@@ -17,12 +17,7 @@ import org.apache.jena.atlas.lib.StrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import com.neusoft.arltr.common.base.RespBody;
 import com.neusoft.arltr.common.constant.SessionKey;
@@ -38,7 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * 搜索控制器
  *
- * @author zhanghaibo
+ *
  *
  */
 @Controller
@@ -186,7 +181,7 @@ public class SearchController {
 	 * @param query 查询关键字
 	 *
 	 */
-	@PostMapping("/api/query")
+	@RequestMapping(value = "/api/query",method = {RequestMethod.GET,RequestMethod.POST})
 	public String queryForOther(HttpServletRequest request, String token, String query) throws IOException {
 		User user = sysService.getUserOfUserIdOrOtherId(token).getBody();
 		if(null != user){

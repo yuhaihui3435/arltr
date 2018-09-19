@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neusoft.arltr.common.base.RespBody;
 
 /**
- * @author zhanghaibo
+ *
  *
  */
 @Component

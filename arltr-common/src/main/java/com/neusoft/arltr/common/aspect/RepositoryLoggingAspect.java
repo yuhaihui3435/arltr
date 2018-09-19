@@ -17,7 +17,7 @@ import com.neusoft.arltr.common.utils.AopTargetUtils;
 /**
  * Repository日志处理
  * 
- * @author zhanghaibo
+ *
  *
  */
 @Aspect

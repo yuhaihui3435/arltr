@@ -9,7 +9,7 @@ import com.neusoft.arltr.common.base.SerializableObject;
 /**
  * easyui树节点
  * 
- * @author zhanghaibo
+ *
  */
 public class TreeNode extends SerializableObject implements Serializable {
 	

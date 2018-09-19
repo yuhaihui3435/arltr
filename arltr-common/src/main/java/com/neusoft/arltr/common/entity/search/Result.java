@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.neusoft.arltr.common.entity.user.EnumerationValueName;
 
 /**
- * @author zhanghaibo
+ *
  *
  */
 @SolrDocument(solrCoreName = "arltr_core")

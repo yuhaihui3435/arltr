@@ -17,7 +17,7 @@ import lombok.Data;
 
 /** PDM文档信息表实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 @Table(name ="PDM_DOC_INFO")
@@ -46,7 +46,7 @@ public class PdmDocInfo {
    private String fileType;
    /** 创建时间 */
    private  java.util.Date createAt;
-   /** 数据状态（0：未处理，1：已获取文件路径，2：已建立索引） */
+   /** 数据状态（0：未处理，1：已获取文件路径，2：已建立索引,3:文件路径无效，4:索引建立失败） */
    private  Integer dataState;
    /** 文档上下文 */
    private String documentCon;

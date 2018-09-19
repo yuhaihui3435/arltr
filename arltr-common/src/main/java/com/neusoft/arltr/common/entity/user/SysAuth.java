@@ -20,7 +20,7 @@ import lombok.Data;
 
 /** 系统权限实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 public class SysAuth {

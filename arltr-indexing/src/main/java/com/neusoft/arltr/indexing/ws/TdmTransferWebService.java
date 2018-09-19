@@ -18,7 +18,7 @@ import com.neusoft.arltr.indexing.model.Project;
 /**
  * 接收各系统数据的WebService
  * 
- * @author zhanghaibo
+ *
  *
  */
 @WebService(targetNamespace = "http://service.arltr.neusoft.com/", name = "ArltrTdmTransfer")

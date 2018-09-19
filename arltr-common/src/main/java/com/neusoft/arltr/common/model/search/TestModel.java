@@ -6,7 +6,7 @@ package com.neusoft.arltr.common.model.search;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * @author zhanghaibo
+ *
  *
  */
 public class TestModel {

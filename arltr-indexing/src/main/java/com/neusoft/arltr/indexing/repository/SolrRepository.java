@@ -7,7 +7,7 @@ import com.neusoft.arltr.common.entity.search.Result;
 /**
  * Solr仓库
  * 
- * @author zhanghaibo
+ *
  */
 public interface SolrRepository extends SolrCrudRepository<Result, String> {
 	

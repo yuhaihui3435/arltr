@@ -16,7 +16,7 @@ import com.neusoft.arltr.interceptor.AuthenticatingInterceptor;
 /**
  * Web应用配置类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @Configuration

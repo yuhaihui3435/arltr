@@ -29,7 +29,7 @@ import lombok.Data;
 /**
  * 用户实体类
  * 
- * @author zhanghaibo
+ *
  */
 @Entity
 @Data

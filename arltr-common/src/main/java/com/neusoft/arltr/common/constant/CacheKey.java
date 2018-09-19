@@ -6,7 +6,7 @@ package com.neusoft.arltr.common.constant;
 /**
  * 缓存key类
  * 
- * @author zhanghaibo
+ *
  *
  */
 public class CacheKey {

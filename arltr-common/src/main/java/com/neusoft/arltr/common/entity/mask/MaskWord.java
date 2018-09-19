@@ -17,7 +17,7 @@ import lombok.Data;
 
 /** 屏蔽词实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 public class MaskWord {

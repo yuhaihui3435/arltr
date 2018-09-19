@@ -32,7 +32,7 @@ import com.neusoft.arltr.search.repository.SearchRepository;
 /**
  * 查询控制器
  * 
- * @author zhanghaibo
+ *
  *
  */
 @RestController

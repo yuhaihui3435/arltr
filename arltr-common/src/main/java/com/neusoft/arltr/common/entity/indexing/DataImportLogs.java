@@ -6,12 +6,7 @@
 
 package com.neusoft.arltr.common.entity.indexing;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import com.neusoft.arltr.common.entity.user.EnumerationValueName;
 
@@ -19,7 +14,7 @@ import lombok.Data;
 
 /** 数据采集记录实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 public class DataImportLogs {
@@ -53,6 +48,9 @@ public class DataImportLogs {
    /** 执行者 */
    private Integer executor;
    /** 任务信息 */
+//   @Lob
+//   @Basic(fetch = FetchType.LAZY)
+//   @Column(columnDefinition = "CLOB")
    private java.lang.String taskInfo;
    /** 执行者名称 */
    private java.lang.String executorName;

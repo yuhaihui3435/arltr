@@ -11,8 +11,12 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.neusoft.arltr.common.entity.indexing.PdmDocInfoFail;
+import com.neusoft.arltr.indexing.repository.PdmDocInfoFailRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,6 +54,8 @@ import com.neusoft.arltr.indexing.service.QuartzConfigService;
 @RestController
 @RequestMapping("/indexing")
 public class IndexingController {
+
+	private static final Logger logger = Logger.getLogger(IndexingController.class.getName());
 	
 	/**任务类型——手动*/
 	private static final short INDEX_TASK_TYPE_MANUAL = 2;
@@ -68,6 +74,9 @@ public class IndexingController {
 	
 	@Autowired
 	SolrRepository solrRepository;
+
+	@Autowired
+	PdmDocInfoFailRepository pdmDocInfoFailRepository;
 	
 	/**
 	* 条件查询（分页）
@@ -122,6 +131,7 @@ public class IndexingController {
 				if(condition.getStartTime()!=null){
 					cal2.setTime(condition.getStartTime());
 				}
+
 				if (condition.getStartTime() != null && cal2.get(Calendar.YEAR)!=1900) {
 					list.add(cb.greaterThanOrEqualTo(startTime, condition.getStartTime()));
 				}
@@ -222,6 +232,101 @@ public class IndexingController {
 		solrRepository.save(doc);
 		
 		return new RespBody<String>();
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	@PostMapping("/timer/fullAmountSave")
+	@ResponseBody
+	public RespBody<String> saveFullAmountTask(@RequestParam("sDate") String sDate,@RequestParam("eDate") String eDate,@RequestParam("taskDate") String taskDate,@RequestParam("taskTime") String taskTime){
+		ScheduleJob scheduleJob = new ScheduleJob();
+		scheduleJob.setJobName("索引全量更新");
+		scheduleJob.setJobGroup(String.valueOf(1));
+		String[] taskTimes=taskTime.split(":");
+		String[] taskDates=taskDate.split("-");
+		String cronStr="00 "+taskTimes[1]+" "+taskTimes[0]+" "+taskDates[2]+" "+taskDates[1]+" ? "+taskDates[0];
+		logger.info("索引全量更新计划任务时间格式为："+cronStr);
+		scheduleJob.setCronExpression(cronStr);
+		scheduleJob.setDesc(sDate+"|"+eDate);//设置任务内容
+		//启动调度
+		this.quartzConfigService.startQuartz(scheduleJob);
+		RespBody respBody=new RespBody();
+		respBody.setMsg("全量更新计划任务设置成功");
+		return respBody;
+	}
+
+
+	/**
+	 * pdm文档同步失败记录查询
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param order
+	 * @param sort
+	 * @param condition uAt 更新时间，failState 失败状态，docId 文档id，docTitle 文档标题
+	 * @return
+	 */
+	@PostMapping("/pdm/fail/query")
+	public RespBody<ListPage> pmdFailQuery(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber, @RequestParam(value = "rows", defaultValue = "10") Integer pageSize,@RequestParam(value="order",defaultValue="desc") String order,@RequestParam(value="sort",defaultValue="uAt") String sort, @RequestBody PdmDocInfoFail condition) {
+
+		Order viewOrder;
+		if("asc".equals(order)){
+			viewOrder=new Order(Sort.Direction.ASC,sort);
+		}else{
+			viewOrder=new Order(Sort.Direction.DESC,sort);
+		}
+
+		Sort sorts=new Sort(viewOrder, new Sort.Order(Sort.Direction.DESC, sort));
+		Pageable pageable =new PageRequest(pageNumber-1,pageSize,sorts);
+
+		Specification<PdmDocInfoFail> specification = new Specification<PdmDocInfoFail>() {
+			@Override
+			public Predicate toPredicate(Root<PdmDocInfoFail> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Path<Integer> failState=root.get("failState");
+				Path<String> docId=root.get("docId");
+				Path<String> docTitle=root.get("docTitle");
+				Path<Date> uAt=root.get("uAt");
+
+				List<Predicate> list = new ArrayList<Predicate>();
+
+				if (condition.getFailState()!=null&& condition.getFailState()!= 0 ) {
+					list.add(cb.equal(failState, condition.getFailState()));
+				}
+				//时间查询
+				Calendar cal2 = Calendar.getInstance();
+				if(condition.getStartTime()!=null){
+					cal2.setTime(condition.getStartTime());
+				}
+				System.out.println(cal2.get(Calendar.YEAR));
+				if (condition.getStartTime() != null && cal2.get(Calendar.YEAR)!=1900) {
+					list.add(cb.greaterThanOrEqualTo(uAt, condition.getStartTime()));
+				}
+				if(condition.getEndTime()!=null){
+					cal2.setTime(condition.getEndTime());
+				}
+				if (condition.getEndTime() != null && cal2.get(Calendar.YEAR)!=1900) {
+					list.add(cb.lessThanOrEqualTo(uAt, condition.getEndTime()));
+				}
+
+				if(StringUtils.isNotBlank(condition.getDocId())){
+					list.add(cb.equal(docId,condition.getDocId()));
+				}
+
+				if(StringUtils.isNotBlank(condition.getDocTitle())){
+					list.add(cb.equal(docTitle,condition.getDocTitle()));
+				}
+
+				Predicate[] p = new Predicate[list.size()];
+				return cb.and(list.toArray(p));
+
+			}
+		};
+		RespBody<ListPage> resbody = new RespBody<ListPage>();
+		Page<PdmDocInfoFail>  respage = pdmDocInfoFailRepository.findAll(specification,pageable);
+		ListPage plist = new ListPage(respage);
+		resbody.setBody(plist);
+		return resbody;
 	}
 	
 	@GetMapping("/wtest")

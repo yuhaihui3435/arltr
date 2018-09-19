@@ -17,7 +17,7 @@ import lombok.Data;
 
 /** 同义词实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 @Table(name = "SYNONYM_T")

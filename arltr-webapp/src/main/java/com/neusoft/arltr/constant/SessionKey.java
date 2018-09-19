@@ -6,7 +6,7 @@ package com.neusoft.arltr.constant;
 /**
  * session主键常量类
  * 
- * @author zhanghaibo
+ *
  *
  */
 public class SessionKey {

@@ -24,8 +24,9 @@
 <div th:replace="fragments/base :: header"></div>
 <div class="cm-main">
     <div class="easyui-layout cm-content">
+        <div class="easyui-tabs" id="tab">
         <div data-options="region:'center'" title="索引维护列表" class="cm-center">
-            <div class="cm-center-detail">
+            <div class="cm-center-detail ">
                 <div class="cm-demo-container">
                     <div class="cm-search-tr">
                         <form action="" id="indexingform" method="post">
@@ -100,7 +101,9 @@
                                 <a href="#" class="easyui-linkbutton authority-insert icon-bg-blue" iconCls="icon-manual"
                                    onclick="setImportType()">手动更新</a>
                                 <a href="#" class="easyui-linkbutton authority-insert icon-bg-blue" iconCls="icon-timer"
-                                   onclick="setTimer()">设置定时器</a>
+                                   onclick="setTimer()">设置增量更新定时器</a>
+                                <a href="#" class="easyui-linkbutton authority-insert icon-bg-blue" iconCls="icon-timer"
+                                   onclick="setFullAmountTimer()">设置全量更新定时器</a>
                             </div>
                         </div>
                     </div>
@@ -182,6 +185,121 @@
                     <a href="javascript:void(0)" class="easyui-linkbutton submit authority-insert"
                        iconCls="icon-save" onclick="confirm()">确定</a>
                 </div>
+            </div>
+            <!-- 全量更新设置窗口 -->
+            <div id="fullAmount_task_dialog" class="easyui-dialog" style="display: none;">
+                <table class="cm-table">
+                    <tr>
+                        <td>
+
+                            <span class="cm-sbox-span">采集开始日期</span>
+                            <input id="sDate" name="sDate" class="easyui-datebox" style="width:50%" editable="fasle">
+                        </td>
+                        <td>
+                            <span class="cm-sbox-span">采集结束日期</span>
+                            <input id="eDate" name="=eDate" class="easyui-datebox" style="width:50%" editable="fasle">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="cm-sbox-span">任务开始日期</span>
+                            <input id="taskDate" name="taskDate" class="easyui-datebox" style="width:50%" editable="fasle">
+                        </td>
+                        <td>
+                            <span class="cm-sbox-span">任务开始时间</span>
+                            <input class="easyui-timespinner" id="taskTime" editable="fasle"
+                                   style="width: 50%">
+                            <input type="hidden" id="taskTime_real" name="taskTime">
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="cm-btn-a">
+                    <a href="javascript:void(0)" class="easyui-linkbutton submit authority-insert"
+                       iconCls="icon-save" onclick="saveFullAmountCronTask()">确定</a>
+
+                </div>
+            </div>
+        </div>
+            <div title="索引失败列表" style="padding:10px">
+                <div class="cm-center-detail ">
+                    <div class="cm-demo-container">
+                        <div class="cm-search-tr">
+                            <form action="" id="pdmFailQueryForm" method="post">
+                                <table class="cm-sbox-table3">
+                                    <tr>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">开始时间</span>
+                                                <input id="pfqStartTime" name="startTime" class="easyui-datebox"
+                                                       data-options="editable:false" style="width: 60%">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">截至时间</span>
+                                                <input id="pfqEndTime" name="startTime" class="easyui-datebox"
+                                                       data-options="editable:false" style="width: 60%">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">失败原因</span>
+                                                <!--<input id="failState" name="failState" class="easyui-combobox " style="width: 60%">-->
+                                                <select id="failState" name="failState" class="easyui-combobox"
+                                                        style="width: 60%">
+                                                    <option value=""></option>
+                                                    <option value="3">文档路径无效</option>
+                                                    <option value="4">索引建立失败</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">文档ID</span>
+
+                                                <input id="docId" name="docId" style="width: 60%">
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="cm-sbox-td">
+                                                <span class="cm-sbox-span">文档标题</span>
+                                                <input id="docTitle" name="docTitle"  style="width: 60%">
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <div class="cm-sbox-td cm-text-center">
+                                                <span class="cm-sbox-span cm-text-center"></span>
+                                                <input type="button" class="cm-search-button" value="搜索"
+                                                       onclick="pdmFailQuerySubmit()"/>
+                                                <input type="reset" class="cm-search-button" onclick="pdmFailQueryClear()"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                        <div>
+                            <table id="indexing_pfq_table"></table>
+                        </div>
+                        <div id="w" class="easyui-window" title="索引建立失败原因" data-options="modal:true,closed:true,iconCls:'icon-save'" style="width:500px;height:400px;padding:5px;">
+                            <div class="easyui-layout" data-options="fit:true">
+
+                                <div data-options="region:'center'" style="padding:10px;" id="failReason">
+
+                                </div>
+                                <div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 0;">
+                                    <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:$('#w').window('close')" style="width:80px">关闭</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

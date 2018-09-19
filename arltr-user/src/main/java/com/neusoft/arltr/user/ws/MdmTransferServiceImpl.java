@@ -26,7 +26,7 @@ import com.neusoft.arltr.user.service.OrgService;
 import com.neusoft.arltr.user.service.UserService;
 
 /**
- * @author zhanghaibo
+ *
  *
  */
 @WebService(serviceName = "MdmTransferService", portName = "MdmTransferPort",

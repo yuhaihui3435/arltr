@@ -6,7 +6,7 @@ package com.neusoft.arltr.common.constant;
 /**
  * 全局常量
  * 
- * @author zhanghaibo
+ *
  *
  */
 public class Constant {

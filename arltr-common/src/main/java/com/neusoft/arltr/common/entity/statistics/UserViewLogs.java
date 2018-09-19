@@ -17,7 +17,7 @@ import lombok.Data;
 
 /** 用户查看记录实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 public class UserViewLogs {

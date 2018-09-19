@@ -22,7 +22,7 @@ import com.neusoft.arltr.indexing.utils.SpringContextUtil;
 /**
  * 搜索服务启动程序
  * 
- * @author zhanghaibo
+ *
  *
  */
 @SpringBootApplication

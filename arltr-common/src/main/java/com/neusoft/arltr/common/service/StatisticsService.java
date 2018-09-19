@@ -21,7 +21,7 @@ import com.neusoft.arltr.common.entity.statistics.UserViewLogs;
 /**
  * 统计服务接口类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @FeignClient("arltr-statistics")

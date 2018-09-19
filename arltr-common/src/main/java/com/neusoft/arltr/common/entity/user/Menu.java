@@ -25,7 +25,7 @@ import lombok.Data;
 
 /** 菜单实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 public class Menu {

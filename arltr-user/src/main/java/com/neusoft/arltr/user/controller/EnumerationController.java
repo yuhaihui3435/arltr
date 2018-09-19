@@ -27,7 +27,7 @@ import com.neusoft.arltr.user.repository.UserRepository;
 /**
  * 枚举控制器
  * 
- * @author zhanghaibo
+ *
  *
  */
 @RestController

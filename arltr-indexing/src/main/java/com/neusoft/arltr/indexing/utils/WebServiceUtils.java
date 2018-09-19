@@ -21,7 +21,7 @@ import com.neusoft.arltr.indexing.model.Project;
 /**
  * WebService工具类
  * 
- * @author zhanghaibo
+ *
  *
  */
 public class WebServiceUtils {

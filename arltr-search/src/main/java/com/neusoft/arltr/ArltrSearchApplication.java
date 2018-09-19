@@ -19,7 +19,7 @@ import com.neusoft.arltr.common.utils.HttpSolrClient;
 /**
  * 搜索服务启动程序
  * 
- * @author zhanghaibo
+ *
  *
  */
 @SpringBootApplication

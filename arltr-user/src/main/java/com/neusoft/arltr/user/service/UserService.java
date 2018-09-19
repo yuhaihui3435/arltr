@@ -14,7 +14,7 @@ import com.neusoft.arltr.user.repository.UserRepository;
 import com.neusoft.arltr.user.ws.MdmUser;
 
 /**
- * @author zhanghaibo
+ *
  *
  */
 @Service

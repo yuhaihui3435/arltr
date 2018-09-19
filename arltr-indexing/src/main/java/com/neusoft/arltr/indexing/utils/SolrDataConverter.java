@@ -15,7 +15,7 @@ import com.neusoft.arltr.indexing.model.Project;
 /**
  * Solr文档转换工具类
  * 
- * @author zhanghaibo
+ *
  * 
  */
 public class SolrDataConverter {

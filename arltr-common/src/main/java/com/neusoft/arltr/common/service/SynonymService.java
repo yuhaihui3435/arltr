@@ -20,7 +20,7 @@ import com.neusoft.arltr.common.entity.synonym.Synonym;
 /**
  * 智能语义服务接口类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @FeignClient("arltr-synonym")

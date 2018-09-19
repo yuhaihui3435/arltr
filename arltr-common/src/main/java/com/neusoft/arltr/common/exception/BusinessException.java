@@ -6,7 +6,7 @@ package com.neusoft.arltr.common.exception;
 /**
  * 业务异常类
  * 
- * @author zhanghaibo
+ *
  *
  */
 public class BusinessException extends RuntimeException {

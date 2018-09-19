@@ -54,6 +54,15 @@ public class UserManageDetailController {
 		User entity=sysService.getUser(user.getId()).getBody();
 		entity.setSecurityClass(user.getSecurityClass());
 		return sysService.saveUser(entity);
-	}	
+	}
+
+	@GetMapping("/user/securityList")
+	@ResponseBody
+	public RespBody<List<Enumeration>>  getSecurityList(){
+		List<Enumeration> enumeration=sysService.getListByType("SECURITY").getBody();
+		RespBody respBody=new RespBody();
+		respBody.setBody(enumeration);
+		return respBody;
+	}
 
 }

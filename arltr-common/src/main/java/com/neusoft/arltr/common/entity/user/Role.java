@@ -27,7 +27,7 @@ import lombok.Data;
 
 /** 角色实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 public class Role {

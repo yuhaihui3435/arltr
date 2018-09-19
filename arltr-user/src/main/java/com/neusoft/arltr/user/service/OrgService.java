@@ -14,7 +14,7 @@ import com.neusoft.arltr.user.repository.OrgnazationRepository;
 import com.neusoft.arltr.user.ws.MdmOrganization;
 
 /**
- * @author zhanghaibo
+ *
  *
  */
 @Service

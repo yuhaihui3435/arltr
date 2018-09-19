@@ -22,7 +22,7 @@ import com.neusoft.arltr.indexing.utils.WebServiceUtils;
 /**
  * TDM数据同步WebService
  * 
- * @author zhanghaibo
+ *
  */
 @WebService(serviceName = "ArltrTdmTransferService", portName = "ArltrTdmTransferPort",
 						targetNamespace = "http://service.arltr.neusoft.com/",

@@ -14,7 +14,7 @@ import com.neusoft.arltr.common.exception.BusinessException;
 /**
  * FeignClient异常返回值处理
  * 
- * @author zhanghaibo
+ *
  *
  */
 @Aspect

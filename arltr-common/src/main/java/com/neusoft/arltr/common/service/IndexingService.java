@@ -3,6 +3,7 @@
  */
 package com.neusoft.arltr.common.service;
 
+import com.neusoft.arltr.common.entity.indexing.PdmDocInfoFail;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ import com.neusoft.arltr.common.entity.user.User;
 /**
  * 索引维护服务接口类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @FeignClient("arltr-indexing")
@@ -63,6 +64,17 @@ public interface IndexingService {
 	 */
 	@PostMapping("/indexing/timer/save")
 	public RespBody<CronTask> saveCronTask(@RequestBody CronTask cronTask);
+
+	/**
+	 * 保存全量定时任务
+	 * @param sDate
+	 * @param eDate
+	 * @param taskDate
+	 * @param taskTime
+	 * @return
+	 */
+	@PostMapping("/indexing/timer/fullAmountSave")
+	public RespBody<String> saveFullAmountCronTask(@RequestParam("sDate") String sDate,@RequestParam("eDate") String eDate,@RequestParam("taskDate") String taskDate,@RequestParam("taskTime") String taskTime);
 	
 	/**
 	 * 手动更新确定采集类型
@@ -82,4 +94,18 @@ public interface IndexingService {
 	@Async
 	@PostMapping("/indexing/doc/score/plus")
 	public RespBody<String> plusDocScore(@RequestParam("id") String id);
+
+	/**
+	 *
+	 * 查询pdm文档同步失败记录
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param order
+	 * @param sort
+	 * @param condition
+	 * @return
+	 */
+	@PostMapping("/indexing/pdm/fail/query")
+	public RespBody<ListPage> pdmFailQuery(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber, @RequestParam(value = "rows", defaultValue = "10") Integer pageSize,@RequestParam(value="order",defaultValue="desc") String order,@RequestParam(value="sort",defaultValue="uAt") String sort, @RequestBody PdmDocInfoFail condition);
+
 }

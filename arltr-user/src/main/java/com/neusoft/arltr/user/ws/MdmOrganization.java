@@ -4,7 +4,7 @@
 package com.neusoft.arltr.user.ws;
 
 /**
- * @author zhanghaibo
+ *
  *
  */
 public class MdmOrganization {

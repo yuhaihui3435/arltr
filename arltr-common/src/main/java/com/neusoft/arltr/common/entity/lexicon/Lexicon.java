@@ -16,7 +16,7 @@ import lombok.Data;
 
 /** 航天词库实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 public class Lexicon {

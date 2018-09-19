@@ -2,10 +2,13 @@ package com.neusoft.arltr.indexing.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.neusoft.arltr.common.entity.indexing.PdmDocInfoFail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +47,7 @@ public class IndexingListController {
 	public ListPage data(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
 			@RequestParam(value = "rows", defaultValue = "10") Integer pageSize, 
 			@RequestParam(value="order",defaultValue="desc") String order,
-			@RequestParam(value="sort",defaultValue="id") String sort,DataImportLogs queryParam) {
+			@RequestParam(value="sort",defaultValue="startTime") String sort,DataImportLogs queryParam) {
 		 RespBody<ListPage> data= indexingService.query(pageNumber, pageSize, order, sort, queryParam);
 		 ListPage resList = data.getBody();
 	     List<Enumeration> importTypeList = sysService.getListByType("INDEX_IMPORT_TYPE").getBody();
@@ -111,6 +114,14 @@ public class IndexingListController {
 	public RespBody<CronTask> saveCronTask(@RequestBody CronTask cronTask){
 		return this.indexingService.saveCronTask(cronTask);
 	}
+
+	@PostMapping("/indexing/timer/saveFullAmount")
+	@ResponseBody
+	public RespBody<String> saveFullAmountCronTask(@RequestBody Map<String,String> map){
+		RespBody respBody=this.indexingService.saveFullAmountCronTask(map.get("sDate"),map.get("eDate"),map.get("taskDate"),map.get("taskTime"));
+		return respBody;
+	}
+
 	
 	/**
 	 * 加载采集类型下拉列表
@@ -134,5 +145,17 @@ public class IndexingListController {
 		User user = (User)request.getSession().getAttribute(SessionKey.USER);
 		return this.indexingService.confirmManualType(importType, user);
 	}
+
+	@PostMapping("/indexing/pdm/fail/query")
+	@ResponseBody
+	public ListPage pdmFailQuery(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
+												 @RequestParam(value = "rows", defaultValue = "10") Integer pageSize,
+												 @RequestParam(value="order",defaultValue="desc") String order,
+												 @RequestParam(value="sort",defaultValue="uAt") String sort,PdmDocInfoFail queryParam){
+		RespBody<ListPage> data= indexingService.pdmFailQuery(pageNumber, pageSize, order, sort, queryParam);
+		ListPage resList = data.getBody();
+		return resList;
+	}
+
 
 }

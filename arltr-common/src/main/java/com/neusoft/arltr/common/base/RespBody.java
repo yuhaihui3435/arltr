@@ -3,7 +3,7 @@ package com.neusoft.arltr.common.base;
 /**
  * JSON返回数据容器
  * 
- * @author zhanghaibo
+ *
  *
  */
 public class RespBody<T> {

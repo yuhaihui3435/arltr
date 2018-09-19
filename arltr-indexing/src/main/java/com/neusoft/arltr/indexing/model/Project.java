@@ -6,7 +6,7 @@ package com.neusoft.arltr.indexing.model;
 /**
  * TDM数据结构
  * 
- * @author zhanghaibo
+ *
  */
 public class Project {
 

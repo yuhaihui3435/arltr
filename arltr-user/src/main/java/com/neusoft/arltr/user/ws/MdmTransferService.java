@@ -10,7 +10,7 @@ import javax.xml.ws.ResponseWrapper;
 /**
  * 接收MDM数据的WebService
  * 
- * @author zhanghaibo
+ *
  *
  */
 @WebService(targetNamespace = "http://service.arltr.neusoft.com/", name = "ArltrMdmTransfer")

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * bean串行基类
  * 
- * @author zhanghaibo
+ *
  *
  */
 public class SerializableObject {

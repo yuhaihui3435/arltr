@@ -16,7 +16,7 @@ import lombok.Data;
 
 /** 定时任务实体类
  * 
- * @author zhanghaibo */
+ *  */
 @Entity
 @Data
 public class CronTask {

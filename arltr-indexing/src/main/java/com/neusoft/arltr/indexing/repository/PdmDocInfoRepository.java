@@ -12,9 +12,13 @@ import com.neusoft.arltr.common.entity.indexing.PdmDocInfo;
 /**
  * 
  * PDM文档信息数据仓库
- * @author zhanghaibo
+ *
  */
 public interface PdmDocInfoRepository extends CrudRepository<PdmDocInfo, Integer> {
 
 	public List<PdmDocInfo> findByDataState(Integer dataState);
+
+	public PdmDocInfo findByDocumentIdAndVersionSno(String documentId,String versionSno);
+
+
 }

@@ -25,7 +25,7 @@ import com.neusoft.arltr.common.utils.TreeNode;
 /**
  * 系统管理服务接口类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @FeignClient("arltr-user")

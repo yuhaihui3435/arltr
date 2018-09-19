@@ -21,7 +21,7 @@ import com.neusoft.arltr.common.entity.lexicon.Lexicon;
 /**
  * 词库服务接口类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @FeignClient("arltr-lexicon")

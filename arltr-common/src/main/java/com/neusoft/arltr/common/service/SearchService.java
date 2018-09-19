@@ -19,7 +19,7 @@ import com.neusoft.arltr.common.model.search.TestModel;
 /**
  * 实时搜索服务接口类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @FeignClient("arltr-search")

@@ -20,7 +20,7 @@ import com.neusoft.arltr.common.entity.mask.MaskWord;
 /**
  * 屏蔽服务接口类
  * 
- * @author zhanghaibo
+ *
  *
  */
 @FeignClient("arltr-mask")

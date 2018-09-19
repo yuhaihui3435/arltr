@@ -14,7 +14,7 @@ import com.neusoft.arltr.common.entity.user.User;
 /**
  * 用户表数据仓库接口
  * 
- * @author zhanghaibo
+ *
  *
  */
 public interface UserRepository extends CrudRepository<User, Integer>,JpaSpecificationExecutor<User> {

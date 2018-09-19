@@ -18,7 +18,7 @@ import lombok.Data;
 /**
  * 用户查询记录实体类
  * 
- * @author zhanghaibo
+ *
  */
 @Entity
 @Data

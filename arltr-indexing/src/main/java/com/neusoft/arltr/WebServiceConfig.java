@@ -2,6 +2,7 @@ package com.neusoft.arltr;
 
 import javax.xml.ws.Endpoint;
 
+import com.neusoft.arltr.indexing.ws.PdmTest;
 import org.apache.cxf.Bus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class WebServiceConfig {
 	
 	@Autowired
 	TdmTransferWebService tdmTransferWebService;
+
+	@Autowired
+    PdmTest pdmTest;
 	
     @Bean
     public Endpoint tdm() {
@@ -25,5 +29,12 @@ public class WebServiceConfig {
         endpoint.publish("/transfer/tdm");
         return endpoint;
     }
+
+//    @Bean
+//    public Endpoint pdm(){
+//        EndpointImpl endpoint = new EndpointImpl(bus, pdmTest);
+//        endpoint.publish("/data/pdm");
+//        return endpoint;
+//    }
 
 }

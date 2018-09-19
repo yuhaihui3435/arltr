@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * 错误处理控制器
  * 
- * @author zhanghaibo
+ *
  *
  */
 @Controller

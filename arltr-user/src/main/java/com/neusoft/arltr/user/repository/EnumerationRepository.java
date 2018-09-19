@@ -14,7 +14,7 @@ import com.neusoft.arltr.common.entity.user.Enumeration;
 /**
  * 枚举表仓库接口
  * 
- * @author zhanghaibo
+ *
  *
  */
 public interface EnumerationRepository extends PagingAndSortingRepository<Enumeration, Integer> {

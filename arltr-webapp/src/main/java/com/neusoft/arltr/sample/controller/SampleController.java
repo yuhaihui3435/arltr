@@ -34,7 +34,7 @@ import com.neusoft.arltr.common.service.SysService;
 import com.neusoft.arltr.common.utils.SolrClientHelper;
 
 /**
- * @author zhanghaibo
+ *
  *
  */
 @Controller
